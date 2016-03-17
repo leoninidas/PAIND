@@ -1,0 +1,8 @@
+**/*.g_c
+**/*.g_x
+**/*.cwGeneratedFileSetLo
+**/ProjectInfo.xmlg
+**/Generated_Code
+**/Documentation
+**/Debug
+**/.settings
