@@ -54,6 +54,7 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd2.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd3.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Cpu.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\I2C1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED2.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED3.c</PathName>
@@ -62,8 +63,10 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LEDpin3.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\PE_LDD.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Vectors.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\WAIT1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Project_Settings\Startup_Code\startup.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Events.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\LIS2DH12TR.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\main.c</PathName>
     </GeneratedCs>
     <GeneratedHs>
@@ -71,6 +74,7 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd2.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd3.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Cpu.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\I2C1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\IO_Map.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED2.h</PathName>
@@ -82,7 +86,9 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\PE_Error.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\PE_LDD.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\PE_Types.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\WAIT1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Events.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\LIS2DH12TR.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Static_Code\IO_Map\MKL04Z4.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Static_Code\PDD\ADC_PDD.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Static_Code\PDD\CMP_PDD.h</PathName>
