@@ -41,6 +41,9 @@
 #include "BitIoLdd3.h"
 #include "WAIT1.h"
 #include "I2C1.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "TU1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -61,26 +64,18 @@ int main(void)
 
   /* Write your code here */
   /* For example: for(;;) { } */
-  //printf("hello world");
-  //LIS2DH12TR_run();
 
-  runShowImage();
 
-  while(1){}
+  LIS2DH12TR_run();
 
-  uint8_t i = 0;
+  //runShowImage();
+
   for(;;)
   {
-	  while(i < 4)
-	  {
-		  LED1_Neg();
-		  LED2_Neg();
-		  LED3_Neg();
-		  WAIT1_Waitms(1);
-		  i++;
-	  }
-	  WAIT1_Waitms(20);
-	  i = 0;
+	LED1_Neg();
+	LED2_Neg();
+	LED3_Neg();
+	WAIT1_Waitms(300);
   }
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

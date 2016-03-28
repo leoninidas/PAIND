@@ -38,7 +38,9 @@ uint8_t LIS2DH12TR_ReadReg(uint8_t addr, uint8_t *data, short dataSize) {
   if (res!=ERR_OK) {
     return ERR_FAILED;
   }
-  while (!deviceData.dataTransmittedFlg) {} /* Wait until data is sent */
+  while (!deviceData.dataTransmittedFlg) {
+	  __asm("nop");
+  } /* Wait until data is sent */
   deviceData.dataTransmittedFlg = FALSE;
 
   /* Receive InpData (1 byte) from the I2C bus and generates a stop condition to end transmission */
@@ -46,45 +48,126 @@ uint8_t LIS2DH12TR_ReadReg(uint8_t addr, uint8_t *data, short dataSize) {
   if (res!=ERR_OK) {
     return ERR_FAILED;
   }
-  while (!deviceData.dataReceivedFlg) {} /* Wait until data is received received */
+  while (!deviceData.dataReceivedFlg) {
+	  __asm("nop");
+  } /* Wait until data is received received */
   deviceData.dataReceivedFlg = FALSE;
   return ERR_OK;
 }
 
 
-static int8_t xyz[3];
+//static int8_t xyz[3];
+
+static bool run = TRUE;
 
 void LIS2DH12TR_run(void)
 {
-	uint8_t res;
-	uint8_t myValue;
+	//uint8_t data = 0b01010101;
+	//uint8_t data1 = 0;
+	//uint8_t data_CTRL_REG1 = 0b01010101;
+	//uint8_t data_CTRL_REG4 = 0b01010101;
+	//uint8_t data_OUT_X_L = 0b01010101;
+	int8_t data_OUT_X_H = 0b01010101;
+	//uint16_t data_OUT_acc_X = 0;
 
-	LED1_On();
-	LED1_Off();
-	LED3_On();
-
-	deviceData.handle = I2C1_Init(&deviceData);
-
-	res = LIS2DH12TR_ReadReg(0x0f, &myValue, 1); // nur zum testen
-
-	res = LIS2DH12TR_WriteReg(0x23, 0b00110000);
-	res = 0xff;
-	res = LIS2DH12TR_WriteReg(0x20, 0x07);
+	uint8_t res = ERR_OK;
+	//uint8_t x_value = 0b01010101;
+	//xyz[0] = 0;
 
 
-	uint8_t a = xyz[0];
-	if (res==ERR_OK)
-	{
-	    for(;;)
-	    {
-	      res = LIS2DH12TR_ReadReg(0x29, (uint8_t*)&xyz, 3); // X_MSB = 0x29
-	      LED1_Put(xyz[0]>2);  //>50
-	      //printf("%d\n",xyz[0]);
-	    }
+
+	while(!run) {}
+
+	LIS2DH12TR_init();
+
+
+
+/*
+	res = LIS2DH12TR_ReadReg(0x0f, &data, sizeof(data));	// I2C test line 1
+	if (res!=ERR_OK) {
+		return;
 	}
+
+	res = LIS2DH12TR_ReadReg(0x0f, &data1, sizeof(data));	// I2C test line 2
+	if (res!=ERR_OK) {
+		return;
+	}
+
+	res = LIS2DH12TR_ReadReg(0x20, &data_CTRL_REG1, 1);		// Erwartung: 0b00000111 => 0x07
+	if (res!=ERR_OK) {
+		return;
+	}
+
+	res = LIS2DH12TR_ReadReg(0x23, &data_CTRL_REG4, 1);		// Erwartung: 0b0000000	=> 0x00
+	if (res!=ERR_OK) {
+		return;
+	}
+
+	res = LIS2DH12TR_WriteReg(0x23, (0b00010000)|(data_CTRL_REG4));
+
+	res = LIS2DH12TR_ReadReg(0x23, &data_CTRL_REG4, 1);		// Erwartung: 0b00010000	=> 0x10
+	if (res!=ERR_OK) {
+		return;
+	}
+	*/
+
+	// Auslesen des Beschleunigungswertes der x-Achse
+	//WAIT1_Waitms(1);
+	WAIT1_WaitCycles(25);
+	for(;;){
+
+		res = LIS2DH12TR_ReadReg(0x29, &data_OUT_X_H, sizeof(data_OUT_X_H));
+		while(res!=ERR_OK) {
+			LED3_Neg();
+			WAIT1_Waitms(100);
+		}
+/*
+		res = LIS2DH12TR_ReadReg(0x28, &data_OUT_X_L, sizeof(data_OUT_X_L));
+		if (res!=ERR_OK) {
+			break;
+		}
+
+		data_OUT_acc_X = (data_OUT_X_H << 8) + data_OUT_X_L;
+*/
+		if (data_OUT_X_H > 50){
+			LED1_On();
+			//WAIT1_Waitms(100);
+		}else{
+			LED1_Off();
+		}
+		//WAIT1_Waitms(200);
+		WAIT1_WaitCycles(25);
+
+	}
+
+
 
 	I2C1_Deinit(deviceData.handle);
 	LED1_Off();
 	LED2_Off();
 	LED3_Off();
+}
+
+void LIS2DH12TR_init(void)
+{
+	uint8_t data, res, data_CTRL_REG1;
+
+	deviceData.handle = I2C1_Init(&deviceData);
+
+	res = LIS2DH12TR_ReadReg(0x0f, &data, sizeof(data));	// I2C test line 1
+		if (res!=ERR_OK) {
+			return;
+		} else if(data != 0x33){
+			return;
+		}
+
+	//WAIT1_WaitCycles(0);
+
+	res = LIS2DH12TR_WriteReg(0x20, 0b01111111);
+	res = LIS2DH12TR_WriteReg(0x23, 0b00100000);
+	while(res!=ERR_OK) {
+		LED3_Neg();
+		WAIT1_Waitms(100);
+	}
+
 }

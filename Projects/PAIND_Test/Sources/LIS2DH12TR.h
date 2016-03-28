@@ -18,5 +18,6 @@ typedef struct {
 } LIS2DH12TR_TDataState;
 
 void LIS2DH12TR_run(void);
+void LIS2DH12TR_init(void);
 
 #endif /* SOURCES_LIS2DH12TR_H_ */

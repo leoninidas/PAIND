@@ -14,13 +14,13 @@
 #define MASK_LED2	0x02
 #define MASK_LED3	0x01
 #define PIXEL_TIME_MS	1
-#define BLANK_TIME_MS	200
+#define BLANK_TIME_MS	300
 
 uint8_t img[] = {7,2,7,0,7,7,7,0,7,4,4,0,7,4,7};
 
 void runShowImage(void)
 {
-	init();
+	initShowImage();
 
 	uint8_t lengthOfImage = sizeof(img);
 	char a,b,c;
@@ -46,7 +46,7 @@ void runShowImage(void)
 
 }
 
-void init(void)
+void initShowImage(void)
 {
 	LED1_Off();
 	LED1_Off();
