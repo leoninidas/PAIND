@@ -122,8 +122,9 @@ void I2C1_OnMasterBlockReceived(LDD_TUserData *UserDataPtr)
 void TI1_OnInterrupt(void)
 {
   /* Write your code here ... */
-	TMR_OnInterrupt();
-
+#if 1
+	AddTriggerTick();
+#endif
 }
 
 /* END Events */

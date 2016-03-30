@@ -5,6 +5,20 @@
  *      Author: Mario
  */
 
+#include "Timer.h"
 
 
+void TIMER_Init(void)
+{
 
+}
+
+void TIMER_Deinit(void)
+{
+	// Do nothing
+}
+
+void TIMER_Interrupt(void)
+{
+	AddTriggerTick();
+}

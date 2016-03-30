@@ -8,8 +8,8 @@
 #ifndef SOURCES_SHOWIMAGE_H_
 #define SOURCES_SHOWIMAGE_H_
 
-void runShowImage(void);
-void initShowImage(void);
+void ShowImageWithTrigger(void);
+void initShowImageWithTrigger(void);
 
 
 

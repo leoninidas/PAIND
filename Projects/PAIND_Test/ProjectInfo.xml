@@ -53,6 +53,7 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd2.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd3.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\CS1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Cpu.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\I2C1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\LED1.c</PathName>
@@ -68,15 +69,19 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Vectors.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\WAIT1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Project_Settings\Startup_Code\startup.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Application.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Events.c</PathName>
-      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\LIS2DH12TR.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\LIS2DH12TR_WithTrigger.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Timer.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Trigger.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\main.c</PathName>
-      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\showImage.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\showImageWithTrigger.c</PathName>
     </GeneratedCs>
     <GeneratedHs>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd2.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\BitIoLdd3.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\CS1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\Cpu.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\I2C1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\IO_Map.h</PathName>
@@ -94,8 +99,11 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\TU1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\TimerIntLdd1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Generated_Code\WAIT1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Application.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Events.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\LIS2DH12TR.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Timer.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\Trigger.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Sources\showImage.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Static_Code\IO_Map\MKL04Z4.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Test\Static_Code\PDD\ADC_PDD.h</PathName>

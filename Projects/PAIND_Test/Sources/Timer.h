@@ -8,7 +8,9 @@
 #ifndef SOURCES_TIMER_H_
 #define SOURCES_TIMER_H_
 
-
+void TIMER_Init(void);
+void TIMER_Deinit(void);
+void TIMER_Interrupt(void);
 
 
 
