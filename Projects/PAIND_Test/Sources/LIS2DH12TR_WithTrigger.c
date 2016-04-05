@@ -112,7 +112,7 @@ void accelTest(void){
 				WAIT1_Waitms(PIXEL_TIME_MS);
 			}
 			swipeRight = FALSE;
-		} /*else if ((dataX < 40) & swipeLeft){
+		} /*else if ((dataX < -40) & swipeLeft){
 
 			WAIT1_Waitms(10);
 
