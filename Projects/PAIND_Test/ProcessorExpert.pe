@@ -3,7 +3,7 @@
   <Header>
     <Name>PAIND_Test</Name>
     <SavedBy>Mario</SavedBy>
-    <ModificationStamp>23</ModificationStamp>
+    <ModificationStamp>24</ModificationStamp>
     <Date>2016-03-17</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.0.RT7_b1515-0427</PEversion>
@@ -6916,7 +6916,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>medium priority</Value>
+        <Value>2</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>HasInterruptServiceRoutineGrp</ItemSymbol>

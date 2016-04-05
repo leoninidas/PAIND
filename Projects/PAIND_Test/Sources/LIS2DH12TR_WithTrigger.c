@@ -216,10 +216,11 @@ void LIS2DH12TR_WithTrigger_init(void){
 		if (res!=ERR_OK) {
 			return;
 		} else if(data != 0x33){
+			res = 0xff;	// eifach öppis
 			return;
 		}
 
-	res = LIS2DH12TR_WithTrigger_WriteReg(0x20, 0b01111111);
+	res = LIS2DH12TR_WithTrigger_WriteReg(0x20, 0b10001001);
 	if(res != ERR_OK){
 		return;
 	}

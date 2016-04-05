@@ -69,8 +69,10 @@ int main(void)
 #if 0
   initShowImageWithTrigger();
   LIS2DH12TR_WithTrigger_init();
-  while(1);
-#else if 1
+  for(;;){}
+#endif
+
+#if 1
   accelTest();
 #endif
 
