@@ -25,19 +25,13 @@ static uint8_t events[EVNT_NOF_EVENTS];
 //uint8_t* img;
 uint8_t img[] = {7,2,7,0,7,7,7,0,7,4,4,0,7,4,7}; // HSLU
 //uint8_t img[] = {7,3,7,0,7,3,7,0,7,3,5,0,7,0,7,5,7}; // MARIO
-//int8_t xAxisValue = 0;
-//int8_t zAxisValue = 0;
-//int8_t prevXAxisValue = 0;
-//int8_t prevZAxisValue = 0;
 int8_t xyzValue[3];
 //int8_t xyzValue_prev[3];
 //uint8_t right = 0;
 //uint8_t front = 0;
 uint8_t res = 0;
 bool appStarted = FALSE;
-//bool newValuesAviable = FALSE;
 bool imgShow = FALSE;
-//bool swipeRight = FALSE;
 //bool moveForwards = FALSE;
 bool isIdle = TRUE;
 
@@ -45,7 +39,7 @@ uint16_t timeMotionRight = 0;	// ms
 uint16_t timeMotionLeft = 0;	// ms
 bool motionRight = FALSE;
 bool motionLeft = FALSE;
-//todo: swipeDetection, show on/off
+int8_t xValPrev = 0;
 
 void startApplication(void){
 	intiApplication();
@@ -58,9 +52,9 @@ void startApplication(void){
 				clearEvent(event);
 			}
 		}
-		//handleAcceleration();
-		if(res != ERR_OK){
+		if(res != ERR_OK){	// Schalte LED1 permanent ein, wenn I2C-Fehler auftritt
 			LED1_On();
+			LED3_On();
 			for(;;){}
 		}
 	}
@@ -68,7 +62,7 @@ void startApplication(void){
 
 
 
-FSM_State currentState = STATE_MARIO;//STATE_HSLU;
+FSM_State currentState = STATE_HSLU;//STATE_HSLU;
 
 void nextState(void){
 	if((++currentState) == STATE_NOF_STATES){
@@ -77,17 +71,21 @@ void nextState(void){
 
 	switch(currentState){
 		case STATE_HSLU:
-			//img = &img_HSLU;
+			//img = img_HSLU; // HSLU
 			break;
 		case STATE_MARIO:
-			//img = &img_MARIO;
-			break;/*
+			//img = img_MARIO;
+			break;
 		case STATE_STEP_COUNTER:
 			break;
 		case STATE_WATER_SPIRIT_LEVEL:
 			break;
 		case STATE_CAR_ACCELERATION:
-			break;*/
+			break;
+		case STATE_6:
+			break;
+		case STATE_7:
+			break;
 		default:
 			break;
 	}
@@ -95,16 +93,12 @@ void nextState(void){
 
 
 
-//int16_t xyzIntegrator[] = {0,0,0};
-bool countRight = FALSE;
-bool countLeft = FALSE;
-int8_t xValPrev = 0;
 
 
 void idleMode(FSM_State state){
-	LED1_Put((state+1) & MASK_LED1);
+	LED1_Put((state+1) & MASK_LED3);
 	LED2_Put((state+1) & MASK_LED2);
-	LED3_Put((state+1) & MASK_LED3);
+	LED3_Put((state+1) & MASK_LED1);
 }
 
 
@@ -118,75 +112,83 @@ void handleAcceleration(void){
 
 #define ACC_LIMIT_RIGHT (126)	// Oberer Schwellwert für Messung
 #define ACC_LIMIT_LEFT (-126)	// Unterer Schwellwert für Messung
+#define TIME_UNTIL_IDLE (800)	// Zeit bis zu Idle-Mode gewechselt wird
 
-//#if 1
+#if 1
 	static uint16_t counterRight = 0;	// Zähler für Rechtsbewegung
 	static uint16_t counterLeft = 0;	// Zähler für Linksbewegung
+	static uint8_t cntrZ = 0;
 
 	if((xyzValue[0] < ACC_LIMIT_RIGHT) & (xValPrev >= ACC_LIMIT_RIGHT)){	// Aktueller Messwert kleiner und vorheriger Messwert grösser/gleich oberer Schwellwert => Flankendetektion
 		counterRight = 0;	// Rechtszähler nullen
-		countRight = TRUE;	// Rechtsbewegung wurde erkannt
+		motionRight = TRUE;	// Rechtsbewegung wurde erkannt
 	} else if(xyzValue[0] < ACC_LIMIT_LEFT){	// Messwert kleiner als unterer Schwellwert
-		countRight = FALSE;		// Rechtszähler anhalten
+		motionRight = FALSE;	// Rechtszähler anhalten
 	}
-	if(countRight){		// Rechtsbewegung aktiv
+	if(motionRight){	// Rechtsbewegung aktiv
 		counterRight++;	// Rechtszähler inkrementieren
-		//if((counterRight == timeMotionRight/2) & (counterRight > 0)){
+		//if((motionRight == timeMotionRight/2) & (counterRight > 0)){
 		if((counterRight*ACCEL_MEAS_FREQ_MS) == ((timeMotionRight - 2*sizeof(img))/2)){	// Aktuelle Rechtslaufzeit == Auslösezeit für Schriftzug
-			// /3, weil Mitte Zeit != Mitte Weg => 1/3 der Zeit, ev division in der klammer schon machen bei timeMotionRight/3
-			imgShow = TRUE;	// Schriftzug auslösen
+			imgShow = TRUE;	// Schriftzug auslösen										// ev Auslösezeit bei 1/3 Rechtslaufzeit festlegen
 			//LED1_On();
 		//} else {
 			//LED1_Off();
 		}
 	}
 
-	if((xyzValue[0] > ACC_LIMIT_LEFT) & (xValPrev <= ACC_LIMIT_LEFT)){
-		counterLeft = 0;
-		countLeft = TRUE;
-	} else if(xyzValue[0] > ACC_LIMIT_RIGHT){
-		countLeft = FALSE;
+	if((xyzValue[0] > ACC_LIMIT_LEFT) & (xValPrev <= ACC_LIMIT_LEFT)){		// Aktueller Messwert grösser und vorheriger Messwert kleiner/gleich unterer Schwellwert => Flankendetektion
+		counterLeft = 0;	// Linkszähler nullen
+		motionLeft = TRUE;	// Linksbewegung wurde erkannt
+	} else if(xyzValue[0] > ACC_LIMIT_RIGHT){	// Messwert grösser als oberer Schwellwert
+		motionLeft = FALSE;		// Linkszähler anhalten
 	}
-	if(countLeft){
-		counterLeft++;
-		//if((counterLeft == timeMotionLeft/2) & (counterLeft > 0)){
-		if((counterLeft*ACCEL_MEAS_FREQ_MS) == ((timeMotionLeft - 2*sizeof(img))/2)){
-			imgShow = TRUE;
+	if(motionLeft){		// Linksbewegung aktiv
+		counterLeft++;	// Linkszähler inkrementieren
+		//if((motionLeft == timeMotionLeft/2) & (counterLeft > 0)){
+		if((counterLeft*ACCEL_MEAS_FREQ_MS) == ((timeMotionLeft - 2*sizeof(img))/2)){	// Aktuelle Linkslaufzeit == Auslösezeit für Schriftzug
+			imgShow = TRUE;	// Schriftzug auslösen										// ev Auslösezeit bei 2/3 Linkslaufzeit festlegen
 			//LED3_On();
 		//} else {
 			//LED3_Off();
 		}
 	}
 
-	xValPrev = xyzValue[0];
-	motionRight = countRight;
-	motionLeft = countLeft;
+	xValPrev = xyzValue[0];		// Variable für vorherigen Wert gleich aktuellem Messwert setzen
 
-	if(!countRight & (counterRight > 0)){
-		timeMotionRight = counterRight * (ACCEL_MEAS_FREQ_MS);
-		counterRight = 0;
+	if(!motionRight & (counterRight > 0)){	// Zeitmessung rechts fertig
+		timeMotionRight = counterRight * (ACCEL_MEAS_FREQ_MS);	// gemessene Zeit in Variable speichern
+		counterRight = 0;	// Rechtszähler nullen
 	}
-	if(!countLeft & (counterLeft > 0)){
-		timeMotionLeft = counterLeft * (ACCEL_MEAS_FREQ_MS);
-		counterLeft = 0;
+	if(!motionLeft & (counterLeft > 0)){	// Zeitmessung links fertig
+		timeMotionLeft = counterLeft * (ACCEL_MEAS_FREQ_MS);	//gemessene Zeit in Variable speichern
+		counterLeft = 0;	// Linkszähler nullen
 	}
-/*#else
 
-	//if((xyzValue[0]>-5)&(xyzValue[0]<5)){ // Detektion der Position a = 0
+	if(((counterRight*ACCEL_MEAS_FREQ_MS)>TIME_UNTIL_IDLE)|((counterLeft*ACCEL_MEAS_FREQ_MS)>TIME_UNTIL_IDLE)){
+		idleMode(currentState);
+		if(xyzValue[2] >= 100){
+			if(++cntrZ == 10){
+				nextState();
+				idleMode(currentState);
+			}
+		} else {
+			cntrZ = 0;
+		}
+	}
+
+#else
+
+	if((xyzValue[0]>-5)&(xyzValue[0]<5)){ // Detektion der Position a = 0
 	//if((xyzValue[0] > ACC_LIMIT_RIGHT) | (xyzValue[0] < ACC_LIMIT_LEFT)){ // Detektion der Minima und Maxima
 		LED1_On();
 	} else {
 		LED1_Off();
 	}
-#endif*/
+#endif
 
-
-
-
-
-
-
-
+// neu
+//------------------------------------------------------------------------------------------------------------------------------------
+// alt
 
 	/*
 	static uint8_t idleCnt = 0;
@@ -251,7 +253,7 @@ void handleAcceleration(void){
 	xyzValue_prev[1] = xyzValue[1];
 	xyzValue_prev[2] = xyzValue[3];
 	*/
-}
+}	// handleAcceleration ende
 
 
 void handleEvent(EventFlags event){
@@ -266,13 +268,10 @@ void handleEvent(EventFlags event){
 			showImage();
 			break;
 		case EVNT_ACCELERATION:
-			//getAccelValue(&xAxisValue);
 			res = LIS2DH12TR_ReadReg(0x29, &xyzValue[0], 1U);
 			//res = LIS2DH12TR_ReadReg(0x2b, &xyzValue[1], 1U);
-			//res = LIS2DH12TR_ReadReg(0x2d, &xyzValue[2], 1U);
+			res = LIS2DH12TR_ReadReg(0x2d, &xyzValue[2], 1U);
 			handleAcceleration();
-			//motionLeft = TRUE;
-			//imgShow = TRUE;
 			break;
 		case EVNT_CHANGE_STATE:
 			//nextState();
@@ -283,42 +282,40 @@ void handleEvent(EventFlags event){
 }
 
 void showImage(void){
-	static uint8_t i = 0;
-	static bool ledsOn = FALSE;
-	static bool iSet = FALSE;
+	static uint8_t i = 0;		// Zähler für Indices
+	static bool ledsOn = FALSE;	// LEDs am leuchten?
+	static bool iSet = FALSE;	// Variable, um zu Beginn einer Linksbewegung die Variable i zu setzen
 
-	if(motionLeft & !iSet){
-		i = sizeof(img);
-		i--;
-		iSet = TRUE;
+	if(motionLeft & !iSet){		// Linksbewegung und i noch nicht gesetzt
+		i = sizeof(img)-1;		// i auf Arraylänge-1 setzen
+		iSet = TRUE;			// i wurde gesetzt
 	}
 
-	if(!ledsOn){
-		LED1_Put(img[i] & MASK_LED1);
-		LED2_Put(img[i] & MASK_LED2);
-		LED3_Put(img[i] & MASK_LED3);
-		ledsOn = TRUE;
-		if(motionRight){
-			i++;
-		} else {
-			i--;
+	if(!ledsOn){				// LEDs leuchten noch nicht
+		LED1_Put(img[i] & MASK_LED1);	// LED1 maskieren
+		LED2_Put(img[i] & MASK_LED2);	// LED2 maskieren
+		LED3_Put(img[i] & MASK_LED3);	// LED3 maskieren
+		ledsOn = TRUE;					// LEDs leuchten
+		if(motionRight){		// Bewegung nach rechts...
+			i++;				// i inkrementieren
+		} else {				// Bewegung nach links...
+			i--;				// i dekrementieren
 		}
-	} else {
-		LED1_Off();
-		LED2_Off();
-		LED3_Off();
-		ledsOn = FALSE;
+	} else {			// LEDs leuchten bereits
+		LED1_Off();		// LED1 aus
+		LED2_Off();		// LED2 aus
+		LED3_Off();		// LED3 aus
+		ledsOn = FALSE;	// LEDs sind jetzt aus
 	}
-	if(((i<sizeof(img)) & motionRight) | ((i != 0xff) & motionLeft)){
-		imgShow = TRUE;
+	if(((i<sizeof(img)) & motionRight) | ((i != 0xff) & motionLeft)){	// i kleiner Arraylänge bei Rechtsbewegung oder i nicht unter 0 gezählt bei Linksbewegung
+		imgShow = TRUE;		// Schriftzug weiterhin anzeigen, da noch nicht vollsändig angezeigt
 	} else {
 		if(ledsOn){
-			imgShow = TRUE;
-		} else {
-			//swipeRight = FALSE;
-			imgShow = FALSE;
-			i = 0;
-			iSet = FALSE;
+			imgShow = TRUE;	// falls LEDs noch leuchten, aber Schriftzug zu Ende, Funktion nochmals ausführen bei nächstem Tick, um LEDs auszuschalten
+		} else {			// falls LEDs jetzt aus sind...
+			imgShow = FALSE;	// nichts mehr anzeigen
+			i = 0;				// i nullen
+			iSet = FALSE;		// iSet zurücksetzen
 		}
 	}
 }
@@ -341,30 +338,31 @@ void LEDStartUp(void){
 		LED2_Off();
 		LED3_Off();
 	} else if(i>1332){
+		idleMode(currentState);
+		//i = 0;
 		appStarted = TRUE;
-		i = 0;
 		return;
 	}
 	i++;
 }
 
 void addTick(void){
-	static uint16_t i = 0;
+	static uint16_t i = 0;		// Zählervariable
 
-	if(appStarted){
-		if(imgShow){
-			setEvent(EVNT_LED_SHOW_IMAGE);
+	if(appStarted){				// wenn Applikation läuft...
+		if(imgShow){			// wenn Schriftzug angezeigt werden soll...
+			setEvent(EVNT_LED_SHOW_IMAGE);	// Event setzen
 		}
-		if((i % ACCEL_MEAS_FREQ_MS)==0){
-			setEvent(EVNT_ACCELERATION);
+		if((i % ACCEL_MEAS_FREQ_MS)==0){	// Wenn Beschleunigungsmessung ausgeführt werden soll...
+			setEvent(EVNT_ACCELERATION);	// Event setzen
 		}
 		/*if((i % LED_HEARTBEAT_FREQ_MS)==0){
 			setEvent(EVNT_LED_HEARTBEAT);
 		}*/
-	} else {
-		setEvent(EVNT_STARTUP);
+	} else {					// wenn Applikation noch nicht läuft
+		setEvent(EVNT_STARTUP);	// Startupevent setzen
 	}
-	i++;
+	i++;	// Zähler inkrementieren
 }
 
 void setEvent(EventFlags event){
