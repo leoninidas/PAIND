@@ -8,6 +8,14 @@
 #ifndef SOURCES_APPLICATION_H_
 #define SOURCES_APPLICATION_H_
 
+#include "LIS2DH12TR.h"
+#include "LED1.h"
+#include "LED2.h"
+#include "LED3.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef enum EventFlags {
 	EVNT_STARTUP,
 	EVNT_LED_HEARTBEAT,
@@ -20,26 +28,31 @@ typedef enum EventFlags {
 typedef enum FSM_State {
 	STATE_HSLU,
 	STATE_MARIO, //STATE_HELLO_WORLD,
-	STATE_STEP_COUNTER,
 	STATE_WATER_SPIRIT_LEVEL,
-	STATE_CAR_ACCELERATION,
-	STATE_6,
-	STATE_7,
+	STATE_STEP_COUNTER,
+	//STATE_CAR_ACCELERATION,
+	//STATE_SPINNING_WHEEL,
+	//STATE_7,
 	STATE_NOF_STATES
 } FSM_State;
 
 void startApplication(void);
 void nextState(void);
+void getAcceleration(void);
+void resetAccelSensor(void);
+void waterSpiritLevel(void);
 void idleMode(FSM_State);
-void handleAcceleration(void);
+void handleAccelerationForImage(void);
 void handleEvent(EventFlags);
-void showImage(void);
+void showImage(uint8_t);
 void LEDHartbeat(void);
 void LEDStartUp(void);
 void addTick(void);
 void setEvent(EventFlags);
 void clearEvent(EventFlags);
 void intiApplication(void);
+void changeSensorResolutionForWaterSpiritLevel(void);
+void changeSensorResolutionForShowingImage(void);
 
 
 

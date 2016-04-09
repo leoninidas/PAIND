@@ -19,7 +19,7 @@ typedef struct {
 
 
 void LIS2DH12TR_run(void);
-void LIS2DH12TR_init(void);
+uint8_t LIS2DH12TR_init(void);
 int8_t getAccelValue(uint8_t*);
 uint8_t LIS2DH12TR_WriteReg(uint8_t addr, uint8_t val);
 uint8_t LIS2DH12TR_ReadReg(uint8_t addr, uint8_t *data, short dataSize);

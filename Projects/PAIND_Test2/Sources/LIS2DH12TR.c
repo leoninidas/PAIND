@@ -190,7 +190,7 @@ int8_t getAccelValue(uint8_t* data_OUT_X_H){
 	}
 }
 
-void LIS2DH12TR_init(void){
+uint8_t LIS2DH12TR_init(void){
 	int8_t data, res;
 	deviceData.handle = I2C1_Init(&deviceData);
 	WAIT1_WaitCycles(25);
@@ -212,4 +212,5 @@ void LIS2DH12TR_init(void){
 		return;
 	}
 	WAIT1_WaitCycles(25);
+	return res;
 }
