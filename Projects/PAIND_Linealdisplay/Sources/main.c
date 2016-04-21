@@ -34,6 +34,36 @@
 #include "LEDpin1.h"
 #include "BitIoLdd1.h"
 #include "WAIT1.h"
+#include "Self_Supply.h"
+#include "BitIoLdd2.h"
+#include "LED2.h"
+#include "LEDpin2.h"
+#include "BitIoLdd3.h"
+#include "LED3.h"
+#include "LEDpin3.h"
+#include "BitIoLdd4.h"
+#include "LED4.h"
+#include "LEDpin4.h"
+#include "BitIoLdd5.h"
+#include "LED5.h"
+#include "LEDpin5.h"
+#include "BitIoLdd6.h"
+#include "LED6.h"
+#include "LEDpin6.h"
+#include "BitIoLdd7.h"
+#include "LED7.h"
+#include "LEDpin7.h"
+#include "BitIoLdd8.h"
+#include "LED8.h"
+#include "LEDpin8.h"
+#include "BitIoLdd9.h"
+#include "I2C1.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "CS1.h"
+#include "TU1.h"
+#include "VDD_ACCEL.h"
+#include "BitIoLdd10.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -50,13 +80,33 @@ int main(void)
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
-  parserStatus ps = setText("HSLU");
+
   /* Write your code here */
-  /* For example: for(;;) { } */
+
+  //parserStatus ps = setText("HSLU");
+  /*for(;;){
+	  Self_Supply_NegVal();
+	  LED1_Neg();
+	  WAIT1_Waitms(1000);
+  }*/
+  //WAIT1_Waitms(2000);
+  Self_Supply_SetVal();
+
+  WAIT1_Waitms(10);
+  startApplication();
+  //accelTest();
+
   for(;;)
   {
 	  LED1_Neg();
-	  WAIT1_Waitms(500);
+	  LED2_Neg();
+	  /*LED3_Neg();
+	  LED4_Neg();
+	  LED5_Neg();
+	  LED6_Neg();
+	  LED7_Neg();
+	  LED8_Neg();*/
+	  WAIT1_Waitms(300);
   }
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

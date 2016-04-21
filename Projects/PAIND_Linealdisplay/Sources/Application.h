@@ -27,7 +27,8 @@ typedef enum EventFlags {
 
 typedef enum FSM_State {
 	STATE_HSLU,
-	STATE_MARIO, //STATE_HELLO_WORLD,
+	//STATE_HELLO_WORLD,
+	STATE_MARIO,
 	STATE_WATER_SPIRIT_LEVEL,
 	//STATE_STEP_COUNTER,
 	//STATE_CAR_ACCELERATION,
@@ -43,8 +44,10 @@ typedef struct LED_Pattern {
 
 void startApplication(void);
 void nextState(void);
-void getAcceleration(void);
+uint8_t getAccelValue_8bit(void);
+uint8_t getAccelValue_12bit(void);
 void resetAccelSensor(void);
+void checkStateChange(uint16_t, uint8_t, int16_t);
 void waterSpiritLevel(void);
 void idleMode(FSM_State);
 void handleAccelerationForImage(void);
@@ -56,8 +59,10 @@ void addTick(void);
 void setEvent(EventFlags);
 void clearEvent(EventFlags);
 void intiApplication(void);
-void changeSensorResolutionForWaterSpiritLevel(void);
-void changeSensorResolutionForShowingImage(void);
+void sensorResolution_2g(void);
+void sensorResolution_8g(void);
+void sensorValueResolution_8bit(void);
+void sensorValueResolution_12bit(void);
 
 
 

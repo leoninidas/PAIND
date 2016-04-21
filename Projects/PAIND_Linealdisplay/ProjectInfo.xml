@@ -51,30 +51,96 @@
   <FILES>
     <GeneratedCs>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd10.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd2.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd3.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd4.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd5.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd6.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd7.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd8.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd9.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\CS1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Cpu.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\I2C1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED2.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED3.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED4.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED5.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED6.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED7.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED8.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin2.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin3.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin4.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin5.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin6.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin7.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin8.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\PE_LDD.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Self_Supply.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TI1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TU1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TimerIntLdd1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\VDD_ACCEL.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Vectors.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\WAIT1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Project_Settings\Startup_Code\startup.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Application.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Events.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\FSM.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\LIS2DH12TR.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\main.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\showImage.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\stringParser.c</PathName>
     </GeneratedCs>
     <GeneratedHs>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd10.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd2.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd3.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd4.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd5.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd6.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd7.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd8.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\BitIoLdd9.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\CS1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Cpu.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\I2C1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IO_Map.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED2.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED3.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED4.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED5.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED6.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED7.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED8.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin2.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin3.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin4.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin5.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin6.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin7.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LEDpin8.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\PE_Const.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\PE_Error.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\PE_LDD.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\PE_Types.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Self_Supply.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TI1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TU1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\TimerIntLdd1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\VDD_ACCEL.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\WAIT1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Application.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Events.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\FSM.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\LIS2DH12TR.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\showImage.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\stringParser.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Static_Code\IO_Map\MKL04Z4.h</PathName>
