@@ -11,9 +11,13 @@
 // SCL Clock-Source Prescaler:	010 110 => 201.649kHz
 //								000 000 => 1.048576MHz  -> geht auch :-)
 
-#define ACCEL_MEAS_FREQ_MS	(1)
-#define PIXEL_TIME_MS		(1)
+#define TICK_FREQ_US			(500)
+#define ACCEL_MEAS_FREQ_US		(1000)
+#define PIXEL_TIME_US			(1000)
+#define TIME_UNTIL_IDLE_US 		(500000)	// Zeit bis zu Idle-Mode gewechselt wird
 #define LED_HEARTBEAT_FREQ_MS	(300)
+#define TIMEOUT_S				(10)
+
 #define MASK_LED1	(0x01)
 #define MASK_LED2	(0x02)
 #define MASK_LED3	(0x04)
@@ -33,60 +37,57 @@
 #define _H	0x7e,0x08,0x08,0x7e,0x00
 #define _I	0x7e,0x00
 #define _J
-#define _K
+#define _K	0x7e,0x18,0x24,0x42,0x00
 #define _L	0x7e,0x40,0x40,0x40,0x00
 #define _M	0x7e,0x04,0x08,0x04,0x7e,0x00
-#define _N
+#define _N	0x7e,0x04,0x08,0x10,0x7e,0x00
 #define _O	0x3c,0x42,0x42,0x42,0x3c,0x00
 #define _P
 #define _Q
 #define _R	0x7e,0x12,0x32,0x4c,0x00
 #define _S	0x44,0x4a,0x4a,0x32,0x00
-#define _T
+#define _T	0x02,0x02,0x7e,0x02,0x02,0x00
 #define _U	0x3e,0x40,0x40,0x3e,0x00
 #define _V
 #define _W	0x3e,0x40,0x30,0x40,0x3e,0x00
 #define _X
 #define _Y
-#define _Z
+#define _Z	0x62,0x52,0x4a,0x46,0x00
 #define _BLANK	0x00,0x00
 
 #define ACC_LIMIT_RIGHT (126)	// Oberer Schwellwert für Messung
 #define ACC_LIMIT_LEFT (-126)	// Unterer Schwellwert für Messung
-#define TIME_UNTIL_IDLE (500)	// Zeit bis zu Idle-Mode gewechselt wird
+
 
 #define Z_TRESHOLD_8G	100
-#define Z_TRESHOLD_2G	2047
+#define Z_TRESHOLD_2G	2020
 
-uint8_t events[EVNT_NOF_EVENTS];
-//uint8_t* img;
-//uint8_t img[] = {7,2,7,0,7,7,7,0,7,4,4,0,7,4,7}; // default: HSLU
-//uint8_t img_HSLU[] = {7,2,7,0,7,7,7,0,7,4,4,0,7,4,7}; // HSLU
-//uint8_t img_HSLU[] = {0x7e,0x08,0x08,0x7e,0x00,0x44,0x4a,0x4a,0x32,0x00,0x7e,0x40,0x40,0x40,0x00,0x3e,0x40,0x40,0x3e}; // HSLU
-uint8_t img_HSLU[] = {_H,_S,_L,_U};
-//uint8_t img_MARIO[] = {0x7e,0x04,0x08,0x04,0x7e,0x00,0x7c,0x12,0x12,0x12,0x00,0x7e,0x12,0x32,0x4c,0x00,0x7e,0x00,0x3c,0x42,0x42,0x42,0x3c}; // MARIO
+uint8_t t = sizeof(uint);
+
+uint8_t events[EVNT_NOF_EVENTS];     //todo: beser hier Pointer definieren und Array im initApplication() inizialisieren uund nich uint_8 verwenden!
+uint8_t img_HSLU[] = {_H,_S,_L,_U};		//todo: gleiches hier
 uint8_t img_MARIO[] = {_M,_A,_R,_I,_O};
-//uint8_t img_HELLO_WORLD[] = {0x7e,0x08,0x08,0x7e,0x00,0x7e,0x4a,0x4a,0x42,0x00,0x7e,0x40,0x40,0x40,0x00,0x7e,0x40,0x40,0x40,0x00,0x3c,0x42,0x42,0x42,0x3c,0x00,0x00,0x00,0x3e,0x40,0x30,0x40,0x3e,0x00,0x3c,0x42,0x42,0x42,0x3c,0x00,0x7e,0x12,0x32,0x4c,0x00,0x7e,0x40,0x40,0x40,0x00,0x7e,0x42,0x42,0x42,0x3c}; // HELLO WORLD
-//uint8_t img_HELLO_WORLD[] = {_H,_E,_L,_L,_O,_BLANK,_W,_O,_R,_L,_D};
+uint8_t img_ELEKTRO[] = {_E,_L,_E,_K,_T,_R,_O};
+uint8_t img_LUZERN[] = {_L,_U,_Z,_E,_R,_N};
 
 LED_Pattern_t img;
 
-int8_t xyzValue[3];
+int8_t xyzValue[3];		//todo: und hier
 int16_t xyzValue_HR[3];
-//int8_t xyzValue_prev[3];
-uint8_t res = 0;
+uint8_t res = 0;		//todo: eigentlich alles so machen
 bool appStarted = FALSE;
 bool imgShow = FALSE;
 bool isIdle = TRUE;
 void (*fp_handleAcceleration)(void);
 void (*fp_getAccelValue)(void);
 
-uint16_t timeMotionRight = 0;	// ms
-uint16_t timeMotionLeft = 0;	// ms
+uint timeMotionRight = 0;	// ms
+uint timeMotionLeft = 0;	// ms
 
-uint16_t timeMotionRightMax = 0;	// ms
-uint16_t timeMotionLeftMax = 0;	// ms
+//uint32_t timeMotionRightMax = 0;	// ms
+//uint32_t timeMotionLeftMax = 0;	// ms
 
+bool isBlanking = TRUE;
 
 bool motionRight = FALSE;
 bool motionLeft = TRUE;
@@ -98,7 +99,6 @@ FSM_State currentState;
  */
 void startApplication(void){
 	intiApplication();				// Initialisierung der Applikation
-	uint8_t i = 0;
 	for(;;){	// Main-Loop
 		for (EventFlags event = 0; event < EVNT_NOF_EVENTS; event++){	// Iterieren durch Event-Flags
 			if(events[event]){		// Event event ist gesetzt
@@ -123,21 +123,30 @@ void handleEvent(EventFlags event){
 		case EVNT_LED_SHOW_IMAGE:
 			showImage();
 			break;
+		case EVNT_WORK:
+			fp_handleAcceleration();
+			break;
 		case EVNT_ACCELERATION:
 			//getAccelValue_8bit();
 			fp_getAccelValue();
 			if(res != ERR_OK){
 				resetAccelSensor();		// Power-on reset des Beschleunigungssensors
-				intiApplication();
+				intiApplication();		//todo: das Resetten läuft noch nicht richtig---- ev ein EVNT hinzufügen, um den Sensor zu resetten
+										// res gescheiter ausweretn
 				return;
 			}
-			fp_handleAcceleration();
+			//fp_handleAcceleration();
 			break;
 		case EVNT_CHANGE_STATE:
 			nextState();
 			break;
+		case EVNT_RESET_ACCEL_SENSOR:
+			resetAccelSensor();		// Power-on reset des Beschleunigungssensors
+			break;
+		case EVNT_TIMEOUT:
+			Self_Supply_ClrVal();	// Selbsthaltung ausschalten
+			break;
 		default:
-			res = 1;
 			break;
 	}
 }
@@ -159,19 +168,28 @@ void nextState(void){
 			img.image = img_HSLU;
 			img.size = sizeof(img_HSLU);
 			break;
-		case STATE_MARIO:
+		case STATE_ELEKTRO:
 			sensorResolution_8g();
 			sensorValueResolution_8bit();
 			fp_getAccelValue = &getAccelValue_8bit;
 			fp_handleAcceleration = &handleAccelerationForImage;
-			img.image = img_MARIO;
-			img.size = sizeof(img_MARIO);
+			img.image = img_ELEKTRO;//img_MARIO;
+			img.size = sizeof(img_ELEKTRO);
 			break;
-		/*case STATE_MARIO:
+		case STATE_LUZERN:
 			sensorResolution_8g();
+			sensorValueResolution_8bit();
+			fp_getAccelValue = &getAccelValue_8bit;
 			fp_handleAcceleration = &handleAccelerationForImage;
-
-			break;*/
+			img.image = img_LUZERN;
+			img.size = sizeof(img_LUZERN);
+			break;
+		case STATE_SPINNING_WHEEL:
+			sensorResolution_16g();
+			sensorValueResolution_8bit();
+			fp_getAccelValue = &getAccelValue_8bit;
+			fp_handleAcceleration = &handleAccelerationForSpinningWheel;
+			break;
 		case STATE_WATER_SPIRIT_LEVEL:
 			sensorResolution_2g();
 			sensorValueResolution_12bit();
@@ -187,10 +205,6 @@ void nextState(void){
 			sensorResolution_8g();
 			fp_handleAcceleration = &handleAccelerationForImage;
 			break;
-		case STATE_SPINNING_WHEEL:
-			sensorResolution_8g();
-			fp_handleAcceleration = &handleAccelerationForImage;
-			break;
 		case STATE_7:
 			sensorResolution_8g();
 			fp_handleAcceleration = &handleAccelerationForImage;
@@ -200,23 +214,20 @@ void nextState(void){
 			currentState = STATE_HSLU;
 			break;
 	}
+	idleMode(currentState);		// aktuellen State mit den LEDs anzeigen
+	isBlanking = TRUE;			// nach State-Wechsel kurz warten, damit die FSM nicht gleich in den nächseten State springt (vor Allem bei der Wasserwage)
 }
 
 /*
  * Beschleunigungswerte der drei Sensor-Achsen auslesen
  */
-uint8_t getAccelValue_8bit(void){
-	//int8_t tmp;
+void getAccelValue_8bit(void){
 	res = LIS2DH12TR_ReadReg(0x29, &xyzValue[0], 1U);
-	//res = LIS2DH12TR_ReadReg(0x28, &tmp, 1U);
 	res = LIS2DH12TR_ReadReg(0x2b, &xyzValue[1], 1U);
-	//res = LIS2DH12TR_ReadReg(0x2a, &tmp, 1U);
 	res = LIS2DH12TR_ReadReg(0x2d, &xyzValue[2], 1U);
-	//res = LIS2DH12TR_ReadReg(0x2c, &tmp, 1U);
-	return res;
 }
 
-uint8_t getAccelValue_12bit(void){
+void getAccelValue_12bit(void){
 	uint8_t tmp_L = 0;
 	uint8_t tmp_H = 0;
 	res = LIS2DH12TR_ReadReg(0x29, &tmp_H, 1U);
@@ -248,7 +259,7 @@ void resetAccelSensor(void){
 }
 
 /*
- * Wird eine genügend schnelle Bewegung in z-Richtung detektiert, wechselt der aktuelle State der FSM.
+ * Wird eine genügend schnelle Bewegung in z-Richtung detektiert, wird ein Event gesetzt, um den Modus zu wechseln.
  */
 void checkStateChange(uint16_t treshold, uint8_t nof_ticks, int16_t value){
 	static uint8_t cntrZ = 0;
@@ -275,8 +286,52 @@ void idleMode(FSM_State state){				// ev blinkend mit EVNT_LED_HEARTBEAT
 	LED8_Put((state+1) & MASK_LED1);
 }
 
-#define WATER_SPIRIT_LEVEL_MEASURE_TIME_MS (50)
-#define WATER_SPIRIT_LEVEL_OFFSET (0)
+uint8_t cntr = 0;
+
+void handleAccelerationForSpinningWheel(void){
+
+
+	LED1_Off();
+	LED2_Off();
+	LED3_Off();
+	LED4_Off();
+	LED5_Off();
+	LED6_Off();
+	LED7_Off();
+	LED8_Off();
+
+	if(xyzValue[1] < -64){
+	cntr++;
+	LED1_Put(cntr==1);
+	LED2_Put(cntr==2);
+	LED3_Put(cntr==3);
+	LED4_Put(cntr==4);
+	LED5_Put(cntr==5);
+	LED6_Put(cntr==6);
+	LED7_Put(cntr==7);
+	LED8_Put(cntr==8);
+
+	if(cntr == 8){
+		cntr = 0;
+	}
+	}
+	/*
+	LED1_Put(xyzValue[1] < -16);
+	LED2_Put(xyzValue[1] < -32);
+	LED3_Put(xyzValue[1] < -48);
+	LED4_Put(xyzValue[1] < -64);
+	LED5_Put(xyzValue[1] < -80);
+	LED6_Put(xyzValue[1] < -96);
+	LED7_Put(xyzValue[1] < -112);
+	LED8_Put(xyzValue[1] <= -126);
+	*/
+	checkStateChange(Z_TRESHOLD_8G, 10, xyzValue[2]);
+
+}
+
+
+#define WATER_SPIRIT_LEVEL_MEASURE_TIME_MS (100)
+#define WATER_SPIRIT_LEVEL_OFFSET (-20)//-20 | 0
 
 /*
  * Implementierung einer einfachen Wasserwaage.
@@ -338,7 +393,7 @@ void waterSpiritLevel(void){
 	}
 	i++;
 	if((xyzValue_HR[0] < -1535) | (xyzValue_HR[0] > 1535)){	// X-Wert ist grösser oder kleiner als 100 -> ablegen auf lange Kante (wie eine Wasserwaage)
-		if(++idleCntr == 3){//} && !isBlanking){
+		if(++idleCntr == 1){//} && !isBlanking){
 			isIdle = !isIdle;
 			//isBlanking = TRUE;
 		}
@@ -364,8 +419,8 @@ void waterSpiritLevel(void){
  */
 void handleAccelerationForImage(void){
 #if 1
-	static uint16_t counterRight = 0;	// Zähler für Rechtsbewegung
-	static uint16_t counterLeft = TIME_UNTIL_IDLE+1;	// Zähler für Linksbewegung
+	static uint counterRight = 0;	// Zähler für Rechtsbewegung
+	static uint counterLeft = (TIME_UNTIL_IDLE_US/TICK_FREQ_US)+1;	// Zähler für Linksbewegung
 
 	if((xyzValue[0] < ACC_LIMIT_RIGHT) & (xValPrev >= ACC_LIMIT_RIGHT)){	// Aktueller Messwert kleiner und vorheriger Messwert grösser/gleich oberer Schwellwert => Flankendetektion
 		counterRight = 0;	// Rechtszähler nullen
@@ -375,12 +430,8 @@ void handleAccelerationForImage(void){
 	}
 	if(motionRight){	// Rechtsbewegung aktiv
 		counterRight++;	// Rechtszähler inkrementieren
-		//if((motionRight == timeMotionRight/2) & (counterRight > 0)){
-		if((counterRight*ACCEL_MEAS_FREQ_MS) == ((timeMotionRight - 2*sizeof(img))/2)){	// Aktuelle Rechtslaufzeit == Auslösezeit für Schriftzug
-			imgShow = TRUE;	// Schriftzug auslösen										// ev Auslösezeit bei 1/3 Rechtslaufzeit festlegen
-			//LED1_On();
-		//} else {
-			//LED1_Off();
+		if(counterRight/**ACCEL_MEAS_FREQ_US*/ == ((timeMotionRight - 2*img.size/**PIXEL_TIME_US*/)/2)){	// Aktuelle Rechtslaufzeit == Auslösezeit für Schriftzug
+			imgShow = TRUE;	// Schriftzug auslösen
 		}
 	}
 
@@ -392,31 +443,27 @@ void handleAccelerationForImage(void){
 	}
 	if(motionLeft){		// Linksbewegung aktiv
 		counterLeft++;	// Linkszähler inkrementieren
-		//if((motionLeft == timeMotionLeft/2) & (counterLeft > 0)){
-		if((counterLeft*ACCEL_MEAS_FREQ_MS) == ((timeMotionLeft - 2*sizeof(img))/2)){	// Aktuelle Linkslaufzeit == Auslösezeit für Schriftzug
-			imgShow = TRUE;	// Schriftzug auslösen										// ev Auslösezeit bei 2/3 Linkslaufzeit festlegen
-			//LED3_On();
-		//} else {
-			//LED3_Off();
+		if(counterLeft/**ACCEL_MEAS_FREQ_US*/ == ((timeMotionLeft - 2*img.size/**PIXEL_TIME_US*/)/2)){	// Aktuelle Linkslaufzeit == Auslösezeit für Schriftzug
+			imgShow = TRUE;	// Schriftzug auslösen
 		}
 	}
 
 	xValPrev = xyzValue[0];		// Variable für vorherigen Wert gleich aktuellem Messwert setzen
 
-	if(((counterRight*ACCEL_MEAS_FREQ_MS)>TIME_UNTIL_IDLE)|((counterLeft*ACCEL_MEAS_FREQ_MS)>TIME_UNTIL_IDLE)){
+	if(((counterRight/**ACCEL_MEAS_FREQ_US*/)>(TIME_UNTIL_IDLE_US/TICK_FREQ_US))|((counterLeft/**ACCEL_MEAS_FREQ_US*/)>(TIME_UNTIL_IDLE_US/TICK_FREQ_US))){
 		idleMode(currentState);
 		checkStateChange(Z_TRESHOLD_8G, 10, xyzValue[2]);
 	}
 
 	if(!motionRight & (counterRight > 0)){	// Zeitmessung rechts fertig
-		timeMotionRight = counterRight * (ACCEL_MEAS_FREQ_MS);	// gemessene Zeit in Variable speichern
+		timeMotionRight = counterRight;// * ACCEL_MEAS_FREQ_US;	// gemessene Zeit in Variable speichern
 		counterRight = 0;	// Rechtszähler nullen
 	}
 	if(!motionLeft & (counterLeft > 0)){	// Zeitmessung links fertig
-		timeMotionLeft = counterLeft * (ACCEL_MEAS_FREQ_MS);	//gemessene Zeit in Variable speichern
+		timeMotionLeft = counterLeft;// * ACCEL_MEAS_FREQ_US;	//gemessene Zeit in Variable speichern
 		counterLeft = 0;	// Linkszähler nullen
 	}
-
+/*
 	if(timeMotionLeft>timeMotionLeftMax){
 		timeMotionLeftMax = timeMotionLeft;
 	}
@@ -424,7 +471,7 @@ void handleAccelerationForImage(void){
 	if(timeMotionRight>timeMotionRightMax){
 		timeMotionRightMax = timeMotionRight;
 	}
-
+*/
 
 
 #else
@@ -504,7 +551,8 @@ void LEDHartbeat(void){
  * Zeigt an, dass das PCB soeben eingeschaltet wurde.
  */
 void LEDStartUp(void){
-#define STARTUP_WAIT_TIME_MS (50)
+#define STARTUP_WAIT_TIME_MS (60)
+	//Self_Supply_SetVal();		// Selbsthaltung einschalten???
 	static uint16_t i = 0;
 
 	switch(i){
@@ -532,7 +580,7 @@ void LEDStartUp(void){
 		case 7*STARTUP_WAIT_TIME_MS:
 			LED1_On();
 			break;
-		case 7*STARTUP_WAIT_TIME_MS+300:
+		case 8*STARTUP_WAIT_TIME_MS:
 			LED1_Off();
 			LED2_Off();
 			LED3_Off();
@@ -542,8 +590,7 @@ void LEDStartUp(void){
 			LED7_Off();
 			LED8_Off();
 			break;
-		case 7*STARTUP_WAIT_TIME_MS+600:
-			//idleMode(currentState);
+		case 8*STARTUP_WAIT_TIME_MS + 600:
 			appStarted = TRUE;
 			return;
 	}
@@ -555,22 +602,32 @@ void LEDStartUp(void){
  * Setzt Events.
  */
 void addTick(void){
-	static uint16_t i = 0;		// Zählervariable
+	static uint i = 0;		// Zählervariable
+	static uint8_t blankCntr = 0;
 
-	if(appStarted){				// wenn Applikation läuft...
-		if(imgShow){			// wenn Schriftzug angezeigt werden soll...
+	if(appStarted && !isBlanking){				// wenn Applikation läuft...
+		setEvent(EVNT_WORK);
+		if(imgShow && !(i % PIXEL_TIME_US/TICK_FREQ_US)){			// wenn Schriftzug angezeigt werden soll...
 			setEvent(EVNT_LED_SHOW_IMAGE);	// Event setzen
 		}
-		if((i % ACCEL_MEAS_FREQ_MS)==0){	// Wenn Beschleunigungsmessung ausgeführt werden soll...
+		if(!(i % (ACCEL_MEAS_FREQ_US/TICK_FREQ_US))){	// Wenn Beschleunigungsmessung ausgeführt werden soll...
 			setEvent(EVNT_ACCELERATION);	// Event setzen
 		}
-		/*if((i % LED_HEARTBEAT_FREQ_MS)==0){
-			setEvent(EVNT_LED_HEARTBEAT);
-		}*/
-	} else {					// wenn Applikation noch nicht läuft
+		if(!(i % (1000000/TICK_FREQ_US)*TIMEOUT_S)){
+			// setEvent(EVNT_TIMEOUT);
+		}
+	} else if(!(i % 1000/TICK_FREQ_US)){					// wenn Applikation noch nicht läuft
 		setEvent(EVNT_STARTUP);	// Startupevent setzen
 	}
 	i++;	// Zähler inkrementieren
+	if(isBlanking){
+		if(++blankCntr == 10){
+			isBlanking = FALSE;
+		}
+	}
+	/*if(i==4000000000){
+		i=0;
+	}*/
 }
 
 /*
@@ -595,11 +652,6 @@ void intiApplication(void){
 	VDD_ACCEL_SetVal();
 	WAIT1_Waitus(1000);
 	res = LIS2DH12TR_init();
-	/*WAIT1_Waitus(1000);
-	sensorResolution_8g();
-	WAIT1_Waitus(1000);
-	sensorValueResolution_8bit();
-	*/
 
 	//res = initWaterSpiritLevel();
 	currentState = STATE_HSLU;
@@ -614,79 +666,77 @@ void intiApplication(void){
 
 	// set events
 	setEvent(EVNT_STARTUP);
-	//setEvent(EVNT_LED_HEARTBEAT);
 
 	fp_handleAcceleration = &handleAccelerationForImage;
 	fp_getAccelValue = &getAccelValue_8bit;
 	img.image = img_HSLU;
-	img.size = sizeof(img_HSLU);//= {img_HSLU, sizeof(img_HSLU)};
-	//img = malloc(32);
-	//img = img_HSLU;
-	//img = malloc(sizeof(img_HSLU));
-	//img = img_HSLU; // HSLU
-
-	//img = malloc(sizeof(uint8_t*)*2);
-	//img[0] = img_HSLU;
-	//img[1] = img_MARIO;
+	img.size = sizeof(img_HSLU);
 
 	// default Values
 	xyzValue[0] = 0;
 	xyzValue[1] = 0;
 	xyzValue[2] = 0;
-
-	/*
-	xyzValue_prev[0] = 0;
-	xyzValue_prev[1] = 0;
-	xyzValue_prev[2] = 0;
-	*/
 }
 
-//#define CTRL_REG4_MASK 0x30
+void deinitApplication(void){
+	// nichts zu tun
+}
+
+
+#define LIS2DH12TR_CTRL_REG1	0x20
+#define LIS2DH12TR_CTRL_REG4	0x23
+
 
 /*
  * Sensoreinstellungen für Wasserwaage.
  */
 void sensorResolution_2g(void){
-	// Beschleunigungssensor mit 2g-Auflösung
-	//res = LIS2DH12TR_WriteReg(0x23, 0b00000000);
 	uint8_t tmp;
-	res = LIS2DH12TR_ReadReg(0x23, &tmp, 1U);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG4, &tmp, 1U);
 	tmp &= 0b11001111;
-	res = LIS2DH12TR_WriteReg(0x23, tmp);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG4, tmp);
 }
 
 /*
  * Sensoreinstellungen für Anzeige eines Schriftzuges mittels LEDs.
  */
 void sensorResolution_8g(void){
-	// Beschleunigungssensor mit 8g-Auflösung
-	//res = LIS2DH12TR_WriteReg(0x23, 0b00100000);
 	uint8_t tmp;
-	res = LIS2DH12TR_ReadReg(0x23, &tmp, 1U);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG4, &tmp, 1U);
 	tmp &= 0b11101111;
 	tmp |= 0b00100000;
-	res = LIS2DH12TR_WriteReg(0x23, tmp);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG4, tmp);
+}
+
+/*
+ * Messbereich des Sensors einstellen: 16g
+ */
+void sensorResolution_16g(void){
+	uint8_t tmp;
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG4, &tmp, 1U);
+	tmp |= 0b00110000;
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG4, tmp);
 }
 
 void sensorValueResolution_8bit(void){
 	uint8_t tmp;
-	res = LIS2DH12TR_ReadReg(0x23, &tmp, 1U);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG4, &tmp, 1U);
 	tmp &= 0b11110111;
-	res = LIS2DH12TR_WriteReg(0x23, tmp);
-	res = LIS2DH12TR_ReadReg(0x20, &tmp, 1U);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG4, tmp);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG1, &tmp, 1U);
 	tmp &= 0b11101111;
 	tmp |= 0b00001000;
-	res = LIS2DH12TR_WriteReg(0x20, tmp);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG1, tmp);
 
 }
 
 void sensorValueResolution_12bit(void){
 	uint8_t tmp;
-	res = LIS2DH12TR_ReadReg(0x20, &tmp, 1U);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG1, &tmp, 1U);
 	tmp &= 0b11110111;
 	tmp |= 0b00010000;
-	res = LIS2DH12TR_WriteReg(0x20, tmp);
-	res = LIS2DH12TR_ReadReg(0x23, &tmp, 1U);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG1, tmp);
+	res = LIS2DH12TR_ReadReg(LIS2DH12TR_CTRL_REG4, &tmp, 1U);
 	tmp |= 0b00001000;
-	res = LIS2DH12TR_WriteReg(0x23, tmp);
+	res = LIS2DH12TR_WriteReg(LIS2DH12TR_CTRL_REG4, tmp);
 }

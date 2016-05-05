@@ -84,12 +84,7 @@ int main(void)
   /* Write your code here */
 
   //parserStatus ps = setText("HSLU");
-  /*for(;;){
-	  Self_Supply_NegVal();
-	  LED1_Neg();
-	  WAIT1_Waitms(1000);
-  }*/
-  //WAIT1_Waitms(2000);
+
   Self_Supply_SetVal();
 
   WAIT1_Waitms(10);
@@ -99,13 +94,6 @@ int main(void)
   for(;;)
   {
 	  LED1_Neg();
-	  LED2_Neg();
-	  /*LED3_Neg();
-	  LED4_Neg();
-	  LED5_Neg();
-	  LED6_Neg();
-	  LED7_Neg();
-	  LED8_Neg();*/
 	  WAIT1_Waitms(300);
   }
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
