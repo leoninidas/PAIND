@@ -63,6 +63,8 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\CS1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Cpu.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\I2C1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IFsh1.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IntFlashLdd1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED1.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED2.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED3.c</PathName>
@@ -92,6 +94,7 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Events.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\FSM.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\LIS2DH12TR.c</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\NVM_Config.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\main.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\showImage.c</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\stringParser.c</PathName>
@@ -110,7 +113,9 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\CS1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\Cpu.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\I2C1.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IFsh1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IO_Map.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\IntFlashLdd1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED1.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED2.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Generated_Code\LED3.h</PathName>
@@ -141,6 +146,7 @@
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\Events.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\FSM.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\LIS2DH12TR.h</PathName>
+      <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\NVM_Config.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\showImage.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Sources\stringParser.h</PathName>
       <PathName>C:\Users\Mario\Documents\HSLU\05_PAIND\Y_GIT_Repo\PAIND\Projects\PAIND_Linealdisplay\Static_Code\IO_Map\MKL04Z4.h</PathName>

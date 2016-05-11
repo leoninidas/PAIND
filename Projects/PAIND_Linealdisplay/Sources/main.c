@@ -64,6 +64,8 @@
 #include "TU1.h"
 #include "VDD_ACCEL.h"
 #include "BitIoLdd10.h"
+#include "IFsh1.h"
+#include "IntFlashLdd1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -78,7 +80,7 @@ int main(void)
   /* Write your local variable definition here */
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
-  PE_low_level_init();
+   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */

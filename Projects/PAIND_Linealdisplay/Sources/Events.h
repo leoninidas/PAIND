@@ -67,6 +67,8 @@
 #include "TU1.h"
 #include "VDD_ACCEL.h"
 #include "BitIoLdd10.h"
+#include "IFsh1.h"
+#include "IntFlashLdd1.h"
 
 #ifdef __cplusplus
 extern "C" {

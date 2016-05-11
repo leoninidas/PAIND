@@ -12,6 +12,7 @@
 #include "LED1.h"
 #include "LED2.h"
 #include "LED3.h"
+#include "NVM_Config.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +24,7 @@ typedef enum EventFlags {
 	EVNT_WORK,
 	EVNT_ACCELERATION,
 	EVNT_CHANGE_STATE,
+	EVNT_CALIB_WATERSPIRITLEVEL_OFFSET,
 	EVNT_RESET_ACCEL_SENSOR,
 	EVNT_TIMEOUT,
 	EVNT_NOF_EVENTS
@@ -42,7 +44,7 @@ typedef enum FSM_State {
 } FSM_State;
 
 typedef struct LED_Pattern {
-	uint8_t* image;
+	uint8_t const* image;
 	uint8_t size;
 } LED_Pattern_t;
 
@@ -51,7 +53,7 @@ void nextState(void);
 void getAccelValue_8bit(void);
 void getAccelValue_12bit(void);
 void resetAccelSensor(void);
-void checkStateChange(uint16_t, uint8_t, int16_t);
+bool checkStateChange(uint16_t, uint8_t, int16_t);
 void handleAccelerationForSpinningWheel(void);
 void waterSpiritLevel(void);
 void idleMode(FSM_State);

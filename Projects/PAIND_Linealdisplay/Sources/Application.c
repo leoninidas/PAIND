@@ -11,9 +11,11 @@
 // SCL Clock-Source Prescaler:	010 110 => 201.649kHz
 //								000 000 => 1.048576MHz  -> geht auch :-)
 
-#define TICK_FREQ_US			(500)
+#define HAS_TIMEOUT				(0)
+
+#define TICK_FREQ_US			(91)
 #define ACCEL_MEAS_FREQ_US		(1000)
-#define PIXEL_TIME_US			(1000)
+//#define PIXEL_TIME_US			(1000)
 #define TIME_UNTIL_IDLE_US 		(500000)	// Zeit bis zu Idle-Mode gewechselt wird
 #define LED_HEARTBEAT_FREQ_MS	(300)
 #define TIMEOUT_S				(10)
@@ -26,6 +28,9 @@
 #define MASK_LED6	(0x20)
 #define MASK_LED7	(0x40)
 #define MASK_LED8	(0x80)
+
+#define LIS2DH12TR_CTRL_REG1	0x20
+#define LIS2DH12TR_CTRL_REG4	0x23
 
 #define _A	0x7c,0x12,0x12,0x12,0x7c,0x00
 #define _B
@@ -54,21 +59,24 @@
 #define _Y
 #define _Z	0x62,0x52,0x4a,0x46,0x00
 #define _BLANK	0x00,0x00
+#define _DOT	0x40,0x00
 
 #define ACC_LIMIT_RIGHT (126)	// Oberer Schwellwert für Messung
 #define ACC_LIMIT_LEFT (-126)	// Unterer Schwellwert für Messung
 
-
+#define Z_TRESHOLD_16G	50
 #define Z_TRESHOLD_8G	100
 #define Z_TRESHOLD_2G	2020
 
 uint8_t t = sizeof(uint);
 
 uint8_t events[EVNT_NOF_EVENTS];     //todo: beser hier Pointer definieren und Array im initApplication() inizialisieren uund nich uint_8 verwenden!
-uint8_t img_HSLU[] = {_H,_S,_L,_U};		//todo: gleiches hier
-uint8_t img_MARIO[] = {_M,_A,_R,_I,_O};
-uint8_t img_ELEKTRO[] = {_E,_L,_E,_K,_T,_R,_O};
-uint8_t img_LUZERN[] = {_L,_U,_Z,_E,_R,_N};
+
+uint8_t const img_HSLU[] = {_H,_S,_L,_U};		//todo: gleiches hier
+uint8_t const img_HELLO_WORLD[] = {_H,_E,_L,_L,_O,_BLANK,_W,_O,_R,_L,_D};
+uint8_t const img_MARIO[] = {_M,_A,_R,_I,_O};
+uint8_t const img_ELEKTRO[] = {_E,_L,_E,_K,_T,_R,_O};
+uint8_t const img_LUZERN[] = {_L,_U,_Z,_E,_R,_N};
 
 LED_Pattern_t img;
 
@@ -78,6 +86,7 @@ uint8_t res = 0;		//todo: eigentlich alles so machen
 bool appStarted = FALSE;
 bool imgShow = FALSE;
 bool isIdle = TRUE;
+
 void (*fp_handleAcceleration)(void);
 void (*fp_getAccelValue)(void);
 
@@ -92,7 +101,16 @@ bool isBlanking = TRUE;
 bool motionRight = FALSE;
 bool motionLeft = TRUE;
 int8_t xValPrev = 0;
+
+// Variablen für die Berechnung des Sensor-Offsets für die Wasserwaage
+int32_t sumForWaterSpiritLevelCalibration = 0;
+int16_t waterSpiritLevelOffset = 0;
+uint8_t nofValuesForWaterSpiritLevelCalibration = 0;
+
+
 FSM_State currentState;
+
+uint pixelTime = 0;
 
 /*
  * Die Event-Flags werden mittels Polling gecheckt. Main-Loop.
@@ -102,8 +120,8 @@ void startApplication(void){
 	for(;;){	// Main-Loop
 		for (EventFlags event = 0; event < EVNT_NOF_EVENTS; event++){	// Iterieren durch Event-Flags
 			if(events[event]){		// Event event ist gesetzt
-				handleEvent(event);	// Event behandeln
 				clearEvent(event);	// Event-Flag löschen
+				handleEvent(event);	// Event behandeln
 			}
 		}
 	}
@@ -133,17 +151,24 @@ void handleEvent(EventFlags event){
 				resetAccelSensor();		// Power-on reset des Beschleunigungssensors
 				intiApplication();		//todo: das Resetten läuft noch nicht richtig---- ev ein EVNT hinzufügen, um den Sensor zu resetten
 										// res gescheiter ausweretn
-				return;
 			}
 			//fp_handleAcceleration();
 			break;
 		case EVNT_CHANGE_STATE:
 			nextState();
 			break;
+		case EVNT_CALIB_WATERSPIRITLEVEL_OFFSET:
+			waterSpiritLevelOffset = sumForWaterSpiritLevelCalibration/nofValuesForWaterSpiritLevelCalibration;
+			CS1_CriticalVariable();
+			CS1_EnterCritical();
+			NVMC_SaveWaterSpiritLevelOffsetData(&waterSpiritLevelOffset, 8*sizeof(waterSpiritLevelOffset));
+			CS1_ExitCritical();
+			break;
 		case EVNT_RESET_ACCEL_SENSOR:
 			resetAccelSensor();		// Power-on reset des Beschleunigungssensors
 			break;
 		case EVNT_TIMEOUT:
+			//uint16_t waterSpiritLevelOffset_tmp;
 			Self_Supply_ClrVal();	// Selbsthaltung ausschalten
 			break;
 		default:
@@ -159,9 +184,12 @@ void nextState(void){
 		currentState = 0;
 	}
 
+	void *ptr;
+	CS1_CriticalVariable();
+
 	switch(currentState){
 		case STATE_HSLU:
-			sensorResolution_8g();
+			sensorResolution_16g();
 			sensorValueResolution_8bit();
 			fp_getAccelValue = &getAccelValue_8bit;
 			fp_handleAcceleration = &handleAccelerationForImage;
@@ -169,7 +197,7 @@ void nextState(void){
 			img.size = sizeof(img_HSLU);
 			break;
 		case STATE_ELEKTRO:
-			sensorResolution_8g();
+			sensorResolution_16g();
 			sensorValueResolution_8bit();
 			fp_getAccelValue = &getAccelValue_8bit;
 			fp_handleAcceleration = &handleAccelerationForImage;
@@ -177,7 +205,7 @@ void nextState(void){
 			img.size = sizeof(img_ELEKTRO);
 			break;
 		case STATE_LUZERN:
-			sensorResolution_8g();
+			sensorResolution_16g();
 			sensorValueResolution_8bit();
 			fp_getAccelValue = &getAccelValue_8bit;
 			fp_handleAcceleration = &handleAccelerationForImage;
@@ -191,6 +219,14 @@ void nextState(void){
 			fp_handleAcceleration = &handleAccelerationForSpinningWheel;
 			break;
 		case STATE_WATER_SPIRIT_LEVEL:
+			CS1_EnterCritical();
+			ptr = NVMC_GetWaterSpiritLevelOffset();
+			CS1_ExitCritical();
+			if(ptr != NULL){
+				waterSpiritLevelOffset = *((int8_t*)ptr);
+			}
+			sumForWaterSpiritLevelCalibration = 0;
+			nofValuesForWaterSpiritLevelCalibration = 0;
 			sensorResolution_2g();
 			sensorValueResolution_12bit();
 			fp_getAccelValue = &getAccelValue_12bit;
@@ -215,6 +251,7 @@ void nextState(void){
 			break;
 	}
 	idleMode(currentState);		// aktuellen State mit den LEDs anzeigen
+	isIdle = TRUE;
 	isBlanking = TRUE;			// nach State-Wechsel kurz warten, damit die FSM nicht gleich in den nächseten State springt (vor Allem bei der Wasserwage)
 }
 
@@ -261,14 +298,16 @@ void resetAccelSensor(void){
 /*
  * Wird eine genügend schnelle Bewegung in z-Richtung detektiert, wird ein Event gesetzt, um den Modus zu wechseln.
  */
-void checkStateChange(uint16_t treshold, uint8_t nof_ticks, int16_t value){
+bool checkStateChange(uint16_t treshold, uint8_t nof_ticks, int16_t value){
 	static uint8_t cntrZ = 0;
 	if(value >= treshold){
 		if(++cntrZ == nof_ticks){
 			setEvent(EVNT_CHANGE_STATE);
+			return TRUE;
 		}
 	} else {
 		cntrZ = 0;
+		return FALSE;
 	}
 }
 
@@ -301,19 +340,19 @@ void handleAccelerationForSpinningWheel(void){
 	LED8_Off();
 
 	if(xyzValue[1] < -64){
-	cntr++;
-	LED1_Put(cntr==1);
-	LED2_Put(cntr==2);
-	LED3_Put(cntr==3);
-	LED4_Put(cntr==4);
-	LED5_Put(cntr==5);
-	LED6_Put(cntr==6);
-	LED7_Put(cntr==7);
-	LED8_Put(cntr==8);
+		cntr++;
+		LED1_Put(cntr==1);
+		LED2_Put(cntr==2);
+		LED3_Put(cntr==3);
+		LED4_Put(cntr==4);
+		LED5_Put(cntr==5);
+		LED6_Put(cntr==6);
+		LED7_Put(cntr==7);
+		LED8_Put(cntr==8);
 
-	if(cntr == 8){
-		cntr = 0;
-	}
+		if(cntr == 8){
+			cntr = 0;
+		}
 	}
 	/*
 	LED1_Put(xyzValue[1] < -16);
@@ -325,86 +364,99 @@ void handleAccelerationForSpinningWheel(void){
 	LED7_Put(xyzValue[1] < -112);
 	LED8_Put(xyzValue[1] <= -126);
 	*/
-	checkStateChange(Z_TRESHOLD_8G, 10, xyzValue[2]);
+	checkStateChange(Z_TRESHOLD_16G, 10, xyzValue[2]);
 
 }
 
 
-#define WATER_SPIRIT_LEVEL_MEASURE_TIME_MS (100)
-#define WATER_SPIRIT_LEVEL_OFFSET (-20)//-20 | 0
+#define WATER_SPIRIT_LEVEL_MEASURE_TIME_MS (500)//*TICK_FREQ_US)
+#define WATER_SPIRIT_LEVEL_OFFSET (0)//-20 | 0
 
 /*
  * Implementierung einer einfachen Wasserwaage.
  */
 void waterSpiritLevel(void){
-	static bool isIdle = TRUE;
-	static bool isBlanking = FALSE;
-	static uint8_t idleCntr = 0;
-	static uint8_t blankCntr = 0;
+	static uint32_t idleCntr = 0;
 	static int32_t sumY= 0;
-	static uint8_t i = 0;
+	static int16_t meanYValue = 0;
+	static int16_t meanYValuePerv = 0;
+	static uint16_t i = 0;
 
-	if(i < WATER_SPIRIT_LEVEL_MEASURE_TIME_MS){
+
+	if(++i < WATER_SPIRIT_LEVEL_MEASURE_TIME_MS){
 		sumY += xyzValue_HR[1];
 	}
 
-	if(!isIdle & (i == WATER_SPIRIT_LEVEL_MEASURE_TIME_MS)){
-		int16_t meanYValue = (sumY / WATER_SPIRIT_LEVEL_MEASURE_TIME_MS) + WATER_SPIRIT_LEVEL_OFFSET;
-		LED1_Off();
-		LED2_Off();
-		LED3_Off();
-		LED4_Off();
-		LED5_Off();
-		LED6_Off();
-		LED7_Off();
-		LED8_Off();
-		if(meanYValue >= 0){
-			if(meanYValue < 2){
-				LED4_On();
-				LED5_On();
-			} else if(meanYValue < 5){
-				LED3_On();
-				LED4_On();
-			} else if(meanYValue < 10){
-				LED2_On();
-				LED3_On();
+	if(!isIdle){
+		if(i == WATER_SPIRIT_LEVEL_MEASURE_TIME_MS){
+			meanYValue = (sumY / WATER_SPIRIT_LEVEL_MEASURE_TIME_MS) - waterSpiritLevelOffset;
+			LED1_Off();
+			LED2_Off();
+			LED3_Off();
+			LED4_Off();
+			LED5_Off();
+			LED6_Off();
+			LED7_Off();
+			LED8_Off();
+			if(meanYValue >= 0){
+				if(meanYValue < 2){
+					LED4_On();
+					LED5_On();
+				} else if(meanYValue < 5){
+					LED3_On();
+					LED4_On();
+				} else if(meanYValue < 10){
+					LED2_On();
+					LED3_On();
+				} else {
+					LED1_On();
+					LED2_On();
+				}
 			} else {
-				LED1_On();
-				LED2_On();
+				if(meanYValue > -2){
+					LED4_On();
+					LED5_On();
+				} else if(meanYValue > -5){
+					LED5_On();
+					LED6_On();
+				} else if(meanYValue > -10){
+					LED6_On();
+					LED7_On();
+				} else {
+					LED7_On();
+					LED8_On();
+				}
 			}
-		} else {
-			if(meanYValue > -2){
-				LED4_On();
-				LED5_On();
-			} else if(meanYValue > -5){
-				LED5_On();
-				LED6_On();
-			} else if(meanYValue > -10){
-				LED6_On();
-				LED7_On();
-			} else {
-				LED7_On();
-				LED8_On();
-			}
-		}
 
-		i = 0;
-		sumY = 0;
-	}
-	i++;
-	if((xyzValue_HR[0] < -1535) | (xyzValue_HR[0] > 1535)){	// X-Wert ist grösser oder kleiner als 100 -> ablegen auf lange Kante (wie eine Wasserwaage)
-		if(++idleCntr == 1){//} && !isBlanking){
-			isIdle = !isIdle;
-			//isBlanking = TRUE;
+			int16_t meanYValueDiff = meanYValuePerv - meanYValue;
+				if((meanYValueDiff > -3) && (meanYValueDiff < 3)){
+					sumForWaterSpiritLevelCalibration += meanYValue;
+					nofValuesForWaterSpiritLevelCalibration++;
+					if(++idleCntr == (2000000/WATER_SPIRIT_LEVEL_MEASURE_TIME_MS)/TICK_FREQ_US){
+						isIdle = TRUE;
+						idleCntr = 0;
+						setEvent(EVNT_CALIB_WATERSPIRITLEVEL_OFFSET);
+					}
+				} else {
+					idleCntr = 0;
+					sumForWaterSpiritLevelCalibration = 0;
+					nofValuesForWaterSpiritLevelCalibration = 0;
+				}
+			meanYValuePerv = meanYValue;
+			i = 0;
+			sumY = 0;
+
 		}
 	} else {
-		idleCntr = 0;
-		isBlanking = FALSE;
-	}
-	if(isIdle){
 		idleMode(currentState);
+		if(++idleCntr >= 1000000/TICK_FREQ_US){
+			isIdle = FALSE;
+			idleCntr = 0;
+		}
 	}
-	checkStateChange(Z_TRESHOLD_2G, 10, xyzValue_HR[2]);
+	if(checkStateChange(Z_TRESHOLD_2G, 10, xyzValue_HR[2])){
+		//isIdle = TRUE;
+	}
 }
 
 
@@ -421,6 +473,9 @@ void handleAccelerationForImage(void){
 #if 1
 	static uint counterRight = 0;	// Zähler für Rechtsbewegung
 	static uint counterLeft = (TIME_UNTIL_IDLE_US/TICK_FREQ_US)+1;	// Zähler für Linksbewegung
+	static uint8_t i = 0;
+	static uint sumR = 0;
+	static uint sumL = 0;
 
 	if((xyzValue[0] < ACC_LIMIT_RIGHT) & (xValPrev >= ACC_LIMIT_RIGHT)){	// Aktueller Messwert kleiner und vorheriger Messwert grösser/gleich oberer Schwellwert => Flankendetektion
 		counterRight = 0;	// Rechtszähler nullen
@@ -430,9 +485,15 @@ void handleAccelerationForImage(void){
 	}
 	if(motionRight){	// Rechtsbewegung aktiv
 		counterRight++;	// Rechtszähler inkrementieren
-		if(counterRight/**ACCEL_MEAS_FREQ_US*/ == ((timeMotionRight - 2*img.size/**PIXEL_TIME_US*/)/2)){	// Aktuelle Rechtslaufzeit == Auslösezeit für Schriftzug
+		if((counterRight == ((timeMotionRight - 2*img.size)/2)) && (timeMotionRight > 2*img.size*pixelTime)){	// Aktuelle Rechtslaufzeit == Auslösezeit für Schriftzug
 			imgShow = TRUE;	// Schriftzug auslösen
+			//pixelTime = timeMotionRight / (2*img.size);
 		}
+
+		/*if(counterRight == timeMotionRight/4){
+			pixelTime = (timeMotionRight/2)/(2*img.size);
+			imgShow = TRUE;
+		}*/
 	}
 
 	if((xyzValue[0] > ACC_LIMIT_LEFT) & (xValPrev <= ACC_LIMIT_LEFT)){		// Aktueller Messwert grösser und vorheriger Messwert kleiner/gleich unterer Schwellwert => Flankendetektion
@@ -443,25 +504,73 @@ void handleAccelerationForImage(void){
 	}
 	if(motionLeft){		// Linksbewegung aktiv
 		counterLeft++;	// Linkszähler inkrementieren
-		if(counterLeft/**ACCEL_MEAS_FREQ_US*/ == ((timeMotionLeft - 2*img.size/**PIXEL_TIME_US*/)/2)){	// Aktuelle Linkslaufzeit == Auslösezeit für Schriftzug
+		if((counterLeft == ((timeMotionLeft - 2*img.size)/2) && (timeMotionLeft > 2*img.size*pixelTime))){	// Aktuelle Linkslaufzeit == Auslösezeit für Schriftzug
 			imgShow = TRUE;	// Schriftzug auslösen
+			//pixelTime = timeMotionLeft / (2*img.size);
 		}
+		/*if(counterLeft == timeMotionLeft/4){
+			pixelTime = (timeMotionLeft/2)/(2*img.size);
+			imgShow = TRUE;
+		}*/
 	}
+
 
 	xValPrev = xyzValue[0];		// Variable für vorherigen Wert gleich aktuellem Messwert setzen
 
 	if(((counterRight/**ACCEL_MEAS_FREQ_US*/)>(TIME_UNTIL_IDLE_US/TICK_FREQ_US))|((counterLeft/**ACCEL_MEAS_FREQ_US*/)>(TIME_UNTIL_IDLE_US/TICK_FREQ_US))){
 		idleMode(currentState);
 		checkStateChange(Z_TRESHOLD_8G, 10, xyzValue[2]);
+	} else {
+		isIdle = FALSE;
 	}
+
+	uint time = 0;
 
 	if(!motionRight & (counterRight > 0)){	// Zeitmessung rechts fertig
 		timeMotionRight = counterRight;// * ACCEL_MEAS_FREQ_US;	// gemessene Zeit in Variable speichern
+		time = timeMotionRight;
 		counterRight = 0;	// Rechtszähler nullen
+		/*sumR += timeMotionRight;
+		if(++i == 10){
+			__asm__("nop");
+		}*/
 	}
 	if(!motionLeft & (counterLeft > 0)){	// Zeitmessung links fertig
 		timeMotionLeft = counterLeft;// * ACCEL_MEAS_FREQ_US;	//gemessene Zeit in Variable speichern
+		//sumL += timeMotionLeft;
+		time = timeMotionLeft;
 		counterLeft = 0;	// Linkszähler nullen
+	}
+
+
+
+
+	if(time){
+		time *= TICK_FREQ_US;
+		if(time < 9000){
+			pixelTime = 500/TICK_FREQ_US;
+		} else if(time < 10000){
+			pixelTime = 600/TICK_FREQ_US;
+		} else if(time < 20000){
+			pixelTime = 700/TICK_FREQ_US;
+		} else if(time < 30000){
+			pixelTime = 800/TICK_FREQ_US;
+		} else if(time < 40000){			// schneller
+			pixelTime = 900/TICK_FREQ_US;	//-----------------------
+		} else if(time < 50000){			// normal
+			pixelTime = 1000/TICK_FREQ_US;	//-----------------------
+		} else if(time < 60000){			// langsamer
+			pixelTime = 960/TICK_FREQ_US;
+		} else if(time < 70000){
+			pixelTime = 920/TICK_FREQ_US;
+		} else if(time < 80000){
+			pixelTime = 880/TICK_FREQ_US;
+		} else if(time < 90000){
+			pixelTime = 840/TICK_FREQ_US;
+		} else {
+			pixelTime = 800/TICK_FREQ_US;
+		}
+
 	}
 /*
 	if(timeMotionLeft>timeMotionLeftMax){
@@ -597,37 +706,44 @@ void LEDStartUp(void){
 	i++;
 }
 
+
+
 /*
- * Wird vom Timer-Interrupt aufgerufen. (f=1kHz)
+ * Wird vom Timer-Interrupt aufgerufen.
  * Setzt Events.
  */
 void addTick(void){
 	static uint i = 0;		// Zählervariable
-	static uint8_t blankCntr = 0;
+	static uint16_t blankCntr = 0;
+	static uint timeOutCntr;
 
 	if(appStarted && !isBlanking){				// wenn Applikation läuft...
 		setEvent(EVNT_WORK);
-		if(imgShow && !(i % PIXEL_TIME_US/TICK_FREQ_US)){			// wenn Schriftzug angezeigt werden soll...
+		if(imgShow && !(i % pixelTime)){//*/(PIXEL_TIME_US/TICK_FREQ_US))){			// wenn Schriftzug angezeigt werden soll...
 			setEvent(EVNT_LED_SHOW_IMAGE);	// Event setzen
 		}
 		if(!(i % (ACCEL_MEAS_FREQ_US/TICK_FREQ_US))){	// Wenn Beschleunigungsmessung ausgeführt werden soll...
 			setEvent(EVNT_ACCELERATION);	// Event setzen
 		}
-		if(!(i % (1000000/TICK_FREQ_US)*TIMEOUT_S)){
-			// setEvent(EVNT_TIMEOUT);
+		if(isIdle){
+			if(++timeOutCntr == TIMEOUT_S*(1000000/TICK_FREQ_US)){
+#if HAS_TIMEOUT
+				setEvent(EVNT_TIMEOUT);
+#endif
+			}
+		} else {
+			timeOutCntr = 0;
 		}
 	} else if(!(i % 1000/TICK_FREQ_US)){					// wenn Applikation noch nicht läuft
 		setEvent(EVNT_STARTUP);	// Startupevent setzen
 	}
 	i++;	// Zähler inkrementieren
 	if(isBlanking){
-		if(++blankCntr == 10){
+		if(++blankCntr == (10*TICK_FREQ_US)){
 			isBlanking = FALSE;
+			blankCntr = 0;
 		}
 	}
-	/*if(i==4000000000){
-		i=0;
-	}*/
 }
 
 /*
@@ -682,9 +798,6 @@ void deinitApplication(void){
 	// nichts zu tun
 }
 
-
-#define LIS2DH12TR_CTRL_REG1	0x20
-#define LIS2DH12TR_CTRL_REG4	0x23
 
 
 /*
